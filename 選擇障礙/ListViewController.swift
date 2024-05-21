@@ -111,22 +111,25 @@ extension ListViewController:UITableViewDataSource, UITableViewDelegate{
   }
   
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    let alert = UIAlertController(title: "Edit", message: "Edit TableView Row", preferredStyle: .alert)
-    alert.addTextField()
-    let update = UIAlertAction(title: "Update", style: .default){ action in
-      let textField = alert.textFields![0]
-      guard let text = textField.text , text != "" else{ //Fix: - 這裡使用假如處理空字串的問題,或許使用錯誤處理！？
-        print("Not Update....")
-        return
-      }
-      self.array[indexPath.row] = text
-      self.tableView.reloadData()
-      print("Update it !!!!")
-    }
-    let cancel = UIAlertAction(title: "Cancel", style: .cancel) // set alert cancel
-    alert.addAction(update)
-    alert.addAction(cancel)
-    self.present(alert, animated: true,completion: nil)
+//    let alert = UIAlertController(title: "Edit", message: "Edit TableView Row", preferredStyle: .alert)
+//    alert.addTextField()
+//    let update = UIAlertAction(title: "Update", style: .default){ action in
+//      let textField = alert.textFields![0]
+//      guard let text = textField.text , text != "" else{ //Fix: - 這裡使用假如處理空字串的問題,或許使用錯誤處理！？
+//        print("Not Update....")
+//        return
+//      }
+//      self.array[indexPath.row] = text
+//      self.tableView.reloadData()
+//      print("Update it !!!!")
+//    }
+//    let cancel = UIAlertAction(title: "Cancel", style: .cancel) // set alert cancel
+//    alert.addAction(update)
+//    alert.addAction(cancel)
+//    self.present(alert, animated: true,completion: nil)
+    
+    
+    
   }
   
   
@@ -139,6 +142,29 @@ extension ListViewController:UITableViewDataSource, UITableViewDelegate{
     }
     
     let swipeActions = UISwipeActionsConfiguration(actions: [delete])
+    return swipeActions
+  }
+  func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+    let edit = UIContextualAction(style: .normal, title: "Edit") { action, view, success in
+      let alert = UIAlertController(title: "Edit", message: "Edit TableView Row", preferredStyle: .alert)
+      alert.addTextField()
+      let update = UIAlertAction(title: "Update", style: .default){ action in
+        let textField = alert.textFields![0]
+        guard let text = textField.text , text != "" else{ //Fix: - 這裡使用假如處理空字串的問題,或許使用錯誤處理！？
+          print("Not Update....")
+          return
+        }
+        self.array[indexPath.row] = text
+        self.tableView.reloadData()
+        print("Update it !!!!")
+      }
+      let cancel = UIAlertAction(title: "Cancel", style: .cancel) // set alert cancel
+      alert.addAction(update)
+      alert.addAction(cancel)
+      self.present(alert, animated: true,completion: nil)
+    }
+    edit.backgroundColor = UIColor(red: 255/255.0, green: 128.0/255.0, blue: 0.0, alpha: 1.0)
+    let swipeActions = UISwipeActionsConfiguration(actions: [edit])
     return swipeActions
   }
 }

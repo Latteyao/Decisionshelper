@@ -8,21 +8,15 @@
 import UIKit
 
 class ViewController: UIViewController{
-  var group:[String] = UserDefaults.standard.array(forKey: "group") as? [String] ?? []
-  var item:[String] = UserDefaults.standard.array(forKey: "item") as? [String] ?? []
 
-  var bookmarkButton:UIButton = {   // bookMark  Button
-    let button = UIButton()
-    button.configuration = button.configurationSet()
-    button.buttonCurcleSet(image: UIImage(systemName: "bookmark.fill"), color: .brown)
-    return button
-  }()
+  var item:[String] = ListViewController().array
   
   var itemButton:UIButton = {   // item  Button
     let button = UIButton(type: .system)
     button.configuration = button.configurationSet()
     button.buttonCurcleSet(image: UIImage(systemName: "plus"), color: .brown)
     button.layer.masksToBounds = true
+    button.layer.cornerRadius = 30
     return button
   }()
   
@@ -59,6 +53,7 @@ class ViewController: UIViewController{
     imageView.isOpaque = true
     return imageView
   }()
+  
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -70,7 +65,7 @@ class ViewController: UIViewController{
     view.addSubview(rollButton)
     view.addSubview(itemLable)
     view.addSubview(itemButton)
-    view.addSubview(bookmarkButton)
+//    view.addSubview(bookmarkButton)
     layoutControll()
     buttonsAction()
   }
@@ -108,7 +103,7 @@ extension ViewController {
       messageImage.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
       messageImage.centerYAnchor.constraint(equalTo: self.view.centerYAnchor),
       
-      
+     
       rollButton.topAnchor.constraint(lessThanOrEqualToSystemSpacingBelow: messageImage.bottomAnchor, multiplier: 7),
       rollButton.leadingAnchor.constraint(equalTo: self.messageImage.leadingAnchor,constant: 40),
       rollButton.trailingAnchor.constraint(equalTo: self.messageImage.trailingAnchor,constant: -40),
@@ -117,15 +112,15 @@ extension ViewController {
       itemLable.centerYAnchor.constraint(equalTo: self.view.centerYAnchor,constant: -14),
       
       
-      itemButton.topAnchor.constraint(lessThanOrEqualToSystemSpacingBelow: messageImage.bottomAnchor, multiplier: 15),
+      itemButton.topAnchor.constraint(lessThanOrEqualToSystemSpacingBelow: messageImage.bottomAnchor, multiplier: 23),
       itemButton.rightAnchor.constraint(equalTo: self.view.rightAnchor,constant: -30),
-      itemButton.heightAnchor.constraint(equalToConstant: 50),
-      itemButton.widthAnchor.constraint(equalToConstant: 50),
+      itemButton.heightAnchor.constraint(equalToConstant: 60),
+      itemButton.widthAnchor.constraint(equalToConstant: 60),
       
-      bookmarkButton.topAnchor.constraint(lessThanOrEqualToSystemSpacingBelow: messageImage.bottomAnchor, multiplier: 25),
-      bookmarkButton.rightAnchor.constraint(equalTo: self.view.rightAnchor,constant: -30),
-      bookmarkButton.heightAnchor.constraint(equalToConstant: 50),
-      bookmarkButton.widthAnchor.constraint(equalToConstant: 50),
+//      bookmarkButton.topAnchor.constraint(lessThanOrEqualToSystemSpacingBelow: messageImage.bottomAnchor, multiplier: 25),
+//      bookmarkButton.rightAnchor.constraint(equalTo: self.view.rightAnchor,constant: -30),
+//      bookmarkButton.heightAnchor.constraint(equalToConstant: 50),
+//      bookmarkButton.widthAnchor.constraint(equalToConstant: 50),
       
     ])
   }
@@ -137,12 +132,12 @@ extension ViewController {
   func buttonsAction(){
     rollButton.addTarget(self, action: #selector(rollButtonAction), for: .touchUpInside)
     itemButton.addTarget(self, action: #selector(navigationButton), for: .touchUpInside)
-    bookmarkButton.addTarget(self, action: #selector(checkCount), for: .touchUpInside)
+//    bookmarkButton.addTarget(self, action: #selector(checkCount), for: .touchUpInside)
   }
   ///Check item this array count
-  @objc func checkCount(){
-    print(item.count)
-  }
+//  @objc func checkCount(){
+//    print(item.count)
+//  }
   ///navigation
   @objc func navigationButton(){
     let controller = ListViewController()
@@ -151,17 +146,19 @@ extension ViewController {
     controller.arrayDidChange = { [weak self] newArray in // Use Closure transfer
 //      SelectItem.items = newArray
       self?.item = newArray
-      UserDefaults.standard.set(newArray, forKey: "item")
       print("Received new array in closure:" ,newArray)
     }
-    controller.array = item
+//    controller.category = category
     self.navigationController?.pushViewController(controller, animated: true)
   }
   
   ///roll action controll
- @objc func rollButtonAction(){
+  @objc func rollButtonAction(){
+//   var elements = UserDefaults.standard.array(forKey: self.category[selectedItem]) as? [String] ?? []
    self.rollButton.animateButton()
+   //Fix: - 待修正
    self.itemLable.labelAnimation(text: item.randomElement()?.maxLength(length: 6))
+//   item.randomElement()?.maxLength(length: 6)
   }
 }
 
